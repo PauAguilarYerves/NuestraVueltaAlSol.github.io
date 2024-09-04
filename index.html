@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestro Dulce Aniversario</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Dancing Script', cursive;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to bottom right, #fff8e1, #ffe4e1);
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #e91e63;
+            text-align: center;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+        h2 {
+            font-size: 2rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .fixed-photo {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        .photo-gallery {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        .photo {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .photo:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.5);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .nav-button:hover {
+            background-color: rgba(255, 255, 255, 0.75);
+        }
+        .prev {
+            left: 10px;
+        }
+        .next {
+            right: 10px;
+        }
+        .caption {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 1.5rem;
+            color: #e91e63;
+        }
+        .video-section {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px;
+        }
+        .love-message {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #e91e63;
+            line-height: 1.6;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: rgba(0,0,0,0.9);
+        }
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 90%;
+            max-height: 90%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+        .modal-caption {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #fff;
+            padding: 10px;
+            font-size: 1.5rem;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            z-index: 1001;
+        }
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: rgba(0,0,0,0.5);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1001;
+        }
+        .modal-prev {
+            left: 20px;
+        }
+        .modal-next {
+            right: 20px;
+        }
+        #lockScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom right, #ffb6c1, #ffc0cb);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .lock-content {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        #countdown {
+            font-size: 2rem;
+            margin-top: 1rem;
+            color: #e91e63;
+        }
+    </style>
+</head>
+<body>
+    <div id="lockScreen">
+        <div class="lock-content">
+            <h1>Nuestro Aniversario Especial</h1>
+            <p>Esta página se desbloqueará en:</p>
+            <div id="countdown"></div>
+        </div>
+    </div>
+
+    <div class="container" style="display: none;">
+        <h1>Nuestro Dulce Aniversario</h1>
+        
+        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WIN_20240127_16_24_28_Pro-9GMVmU46Id9zGo9YW3IQHswDhozjPv.jpg" alt="Nuestra foto especial" class="fixed-photo">
+        
+        <div class="photo-gallery">
+            <h2>Momentos Preciosos</h2>
+            <img id="currentPhoto" src="" alt="Foto de la galería" class="photo">
+            <button class="nav-button prev" onclick="changePhoto(-1)">&#10094;</button>
+            <button class="nav-button next" onclick="changePhoto(1)">&#10095;</button>
+            <p id="caption" class="caption"></p>
+        </div>
+        
+        <div class="video-section">
+            <h2>Nuestro Video Especial</h2>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/QSPyF4KLYso" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+        
+        <div>
+            <h2>Nuestro Mensaje de Amor</h2>
+            <p class="love-message">
+                Mi amor, cada día a tu lado es un regalo. Tu sonrisa ilumina mi mundo y tu amor llena mi corazón de alegría. 
+                Gracias por un año maravilloso lleno de momentos inolvidables. Estoy emocionado por todos los años que nos 
+                esperan juntos. Te amo más de lo que las palabras pueden expresar.
+            </p>
+        </div>
+    </div>
+
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImg">
+        <div id="modalCaption" class="modal-caption"></div>
+        <a class="modal-nav modal-prev" onclick="changeModalPhoto(-1)">&#10094;</a>
+        <a class="modal-nav modal-next" onclick="changeModalPhoto(1)">&#10095;</a>
+    </div>
+
+    <script>
+        const unlockDate = new Date('2024-12-20T00:00:00').getTime();
+        const photos = [
+            { url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WIN_20240127_16_24_27_Pro-jMpNX4zN6b9sjiBcn5KS8aCUcWg8xY.jpg", caption: "Una sonrisa que ilumina mi día" },
+            { url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WIN_20240127_16_24_28_Pro%20(3)-JxMMmPnm6jaHmASdx7jZDIcSLkE78k.jpg", caption: "Compartiendo momentos especiales" },
+            { url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WIN_20240127_16_24_27_Pro%20(4)-LXk38TEDOEYzyNVidYGReDBK29KQHW.jpg", caption: "Tu mirada lo dice todo" },
+            { url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WIN_20240127_16_24_28_Pro%20(2)-GT4hu93PiNZHcXuh4dUbDRgCUYtYLq.jpg", caption: "Cada día contigo es una aventura" },
+        ];
+
+        let currentPhotoIndex = 0;
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = unlockDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+            if (distance < 0) {
+                clearInterval(countdownTimer);
+                document.getElementById("lockScreen").style.display = "none";
+                document.querySelector(".container").style.display = "block";
+                initializeGallery();
+            }
+        }
+
+        const countdownTimer = setInterval(updateCountdown, 1000);
+
+        function changePhoto(direction) {
+            currentPhotoIndex = (currentPhotoIndex + direction + photos.length) % photos.length;
+            updatePhoto();
+        }
+
+        function updatePhoto() {
+            const currentPhoto = document.getElementById('currentPhoto');
+            const caption = document.getElementById('caption');
+            currentPhoto.src = photos[currentPhotoIndex].url;
+            currentPhoto.alt = photos[currentPhotoIndex].caption;
+            caption.textContent = photos[currentPhotoIndex].caption;
+            
+            currentPhoto.onerror = function() {
+                this.src = 'https://via.placeholder.com/400x300?text=Imagen+no+disponible';
+                this.alt = 'Imagen no disponible';
+            };
+        }
+
+        const modal = document.getElementById("myModal");
+        const modalImg = document.getElementById("modalImg");
+        const modalCaption = document.getElementById("modalCaption");
+        const currentPhoto = document.getElementById("currentPhoto");
+        const span = document.getElementsByClassName("close")[0];
+
+        currentPhoto.onclick = function() {
+            modal.style.display = "block";
+            updateModalPhoto();
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        function changeModalPhoto(direction) {
+            currentPhotoIndex = (currentPhotoIndex + direction + photos.length) % photos.length;
+            updateModalPhoto();
+        }
+
+        function updateModalPhoto() {
+            modalImg.src = photos[currentPhotoIndex].url;
+            modalImg.alt = photos[currentPhotoIndex].caption;
+            modalCaption.innerHTML = photos[currentPhotoIndex].caption;
+            
+            modalImg.onerror = function() {
+                this.src = 'https://via.placeholder.com/400x300?text=Imagen+no+disponible';
+                this.alt = 'Imagen no disponible';
+            };
+        }
+
+        function initializeGallery() {
+            updatePhoto();
+        }
+
+        updateCountdown();
+    </script>
+</body>
+</html>
