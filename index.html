@@ -25,6 +25,7 @@
             border-radius: 15px;
             padding: 2rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: none;
         }
         h1, h2 {
             color: #e91e63;
@@ -211,6 +212,37 @@
             margin-top: 1rem;
             color: #e91e63;
         }
+        #passwordForm {
+            display: none;
+            text-align: center;
+        }
+        #password {
+            padding: 0.5rem;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 10px;
+            margin-top: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        #submitPassword {
+            margin-top: 1rem;
+            padding: 0.5rem 2rem;
+            font-size: 1.2rem;
+            background-color: #e91e63;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        #submitPassword:hover {
+            background-color: #c2185b;
+        }
+        #errorMsg {
+            color: red;
+            margin-top: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -219,10 +251,16 @@
             <h1>Nuestro Aniversario Especial</h1>
             <p>Esta página se desbloqueará en:</p>
             <div id="countdown"></div>
+
+            <div id="passwordForm">
+                <input type="password" id="password" placeholder="Ingresa la contraseña"><br>
+                <button id="submitPassword">Desbloquear</button>
+                <p id="errorMsg"></p>
+            </div>
         </div>
     </div>
 
-    <div class="container" style="display: none;">
+    <div class="container">
         <h1>Nuestro Dulce Aniversario</h1>
         
         <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WIN_20240127_16_24_28_Pro-9GMVmU46Id9zGo9YW3IQHswDhozjPv.jpg" alt="Nuestra foto especial" class="fixed-photo">
@@ -262,6 +300,7 @@
 
     <script>
         const unlockDate = new Date('2024-12-20T00:00:00').getTime();
+        const correctPassword = "MiAniversario2024";
         const photos = [
             { url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WIN_20240127_16_24_27_Pro-jMpNX4zN6b9sjiBcn5KS8aCUcWg8xY.jpg", caption: "Una sonrisa que ilumina mi día" },
             { url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WIN_20240127_16_24_28_Pro%20(3)-JxMMmPnm6jaHmASdx7jZDIcSLkE78k.jpg", caption: "Compartiendo momentos especiales" },
@@ -284,13 +323,22 @@
 
             if (distance < 0) {
                 clearInterval(countdownTimer);
-                document.getElementById("lockScreen").style.display = "none";
-                document.querySelector(".container").style.display = "block";
-                initializeGallery();
+                document.getElementById("passwordForm").style.display = "block";
             }
         }
 
         const countdownTimer = setInterval(updateCountdown, 1000);
+
+        document.getElementById("submitPassword").addEventListener("click", function() {
+            const password = document.getElementById("password").value;
+            if (password === correctPassword) {
+                document.getElementById("lockScreen").style.display = "none";
+                document.querySelector(".container").style.display = "block";
+                initializeGallery();
+            } else {
+                document.getElementById("errorMsg").textContent = "Contraseña incorrecta. Inténtalo de nuevo.";
+            }
+        });
 
         function changePhoto(direction) {
             currentPhotoIndex = (currentPhotoIndex + direction + photos.length) % photos.length;
