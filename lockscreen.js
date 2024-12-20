@@ -8,7 +8,7 @@ function formatTimeRemaining(ms) {
 
 // Función para actualizar el contador
 function updateCountdown() {
-    const targetDate = new Date('2024-12-20T13:00:00');
+    const targetDate = new Date('2024-12-20T16:00:00');
     const now = new Date();
     const timeRemaining = targetDate - now;
 
