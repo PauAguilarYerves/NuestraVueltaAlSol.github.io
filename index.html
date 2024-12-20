@@ -1,406 +1,295 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuestro primer año</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
-    <link rel="icon" href="https://png.pngtree.com/png-clipart/20221006/original/pngtree-shiny-blue-heart-love-symbol-png-image_8658930.png">
-    <style>
-        body {
-            font-family: 'Dancing Script', cursive;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(to bottom right, #E0F7FA, #B3E5FC); /* Azul cielo claro */
-        }
-        .container {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            display: none;
-        }
-        h1, h2 {
-            color: #0277BD; /* Azul fuerte */
-            text-align: center;
-        }
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-        }
-        h2 {
-            font-size: 2rem;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-        }
-        .fixed-photo {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 2rem;
-        }
-        .photo-gallery {
-            position: relative;
-            margin-bottom: 2rem;
-        }
-        .photo {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s ease;
-            cursor: pointer;
-        }
-        .photo:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .nav-button {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(255, 255, 255, 0.5);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .nav-button:hover {
-            background-color: rgba(255, 255, 255, 0.75);
-        }
-        .prev {
-            left: 10px;
-        }
-        .next {
-            right: 10px;
-        }
-        .caption {
-            text-align: center;
-            margin-top: 1rem;
-            font-size: 1.5rem;
-            color: #0277BD; /* Azul fuerte */
-        }
-        .video-section {
-            position: relative;
-            margin-bottom: 2rem;
-        }
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            height: 0;
-            overflow: hidden;
-        }
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-            border-radius: 10px;
-        }
-        .love-message {
-            text-align: center;
-            font-size: 1.5rem;
-            color: #01579B; /* Azul más oscuro */
-            line-height: 1.6;
-            padding: 1rem;
-            background-color: rgba(255, 255, 255, 0.6);
-            border-radius: 10px;
-            margin-top: 1rem;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: rgba(0,0,0,0.9);
-        }
-        .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-width: 90%;
-            max-height: 90%;
-            width: auto;
-            height: auto;
-            object-fit: contain;
-        }
-        .modal-caption {
-            position: absolute;
-            bottom: 20px;
-            left: 0;
-            right: 0;
-            text-align: center;
-            color: #fff;
-            padding: 10px;
-            font-size: 1.5rem;
-            background-color: rgba(0,0,0,0.5);
-        }
-        .close {
-            position: absolute;
-            top: 15px;
-            right: 35px;
-            color: #f1f1f1;
-            font-size: 40px;
-            font-weight: bold;
-            transition: 0.3s;
-            z-index: 1001;
-        }
-        .close:hover,
-        .close:focus {
-            color: #bbb;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .modal-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            color: white;
-            font-size: 30px;
-            font-weight: bold;
-            cursor: pointer;
-            background-color: rgba(0,0,0,0.5);
-            padding: 10px;
-            border-radius: 5px;
-            z-index: 1001;
-        }
-        .modal-prev {
-            left: 20px;
-        }
-        .modal-next {
-            right: 20px;
-        }
-        #lockScreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom right, #B3E5FC, #E1F5FE); /* Azul cielo claro */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-        .lock-content {
-            text-align: center;
-            background-color: rgba(255, 255, 255, 0.8);
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        #countdown {
-            font-size: 2rem;
-            margin-top: 1rem;
-            color: #01579B; /* Azul más oscuro */
-        }
-        #passwordForm {
-            display: none;
-            text-align: center;
-        }
-        #password {
-            padding: 0.5rem;
-            font-size: 1.2rem;
-            border: none;
-            border-radius: 10px;
-            margin-top: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        #submitPassword {
-            margin-top: 1rem;
-            padding: 0.5rem 2rem;
-            font-size: 1.2rem;
-            background-color: #0277BD; /* Azul fuerte */
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease;
-        }
-        #submitPassword:hover {
-            background-color: #01579B; /* Azul más oscuro */
-        }
-        #errorMsg {
-            color: red;
-            margin-top: 1rem;
-        }
-    </style>
+    <title>Nuestro Primer Año</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="lockscreen.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
-    <div id="lockScreen">
+    <!-- Lock Screen -->
+    <div id="lock-screen">
         <div class="lock-content">
-            <h1>Nuestro Primer Año</h1>
+            <h1>¡Sorpresa!</h1>
             <p>Esta página se desbloqueará en:</p>
-            <div id="countdown"></div>
+            <div id="lock-countdown"></div>
+            <p class="lock-message">Te espera algo especial...</p>
+        </div>
+    </div>
 
-            <div id="passwordForm">
-                <input type="password" id="password" placeholder="Ingresa la contraseña"><br>
-                <button id="submitPassword">Desbloquear</button>
-                <p id="errorMsg"></p>
+    <!-- Main Content -->
+    <div id="main-content" class="hidden">
+        <!-- Fondo con efecto parallax -->
+        <div class="gradient-bg"></div>
+        <div id="parallax-bg"></div>
+
+        <header>
+            <h1>Feliz Primer Aniversario</h1>
+            <p>Para la persona más especial de mi vida 💙</p>
+        </header>
+
+        <!-- Galería de imágenes -->
+        <section id="gallery">
+            <h2>Nuestros Momentos</h2>
+            <div class="photo-gallery">
+                <div class="slide">
+                    <img src="img/e2.jpg" alt="Momento de amor">
+                    <p class="caption">Cada día me enamoro más de tu sonrisa y de todo lo que eres ❤️</p>
+                </div>
+                <div class="slide">
+                    <img src="img/e3.jpg" alt="Momento especial">
+                    <p class="caption">Eres el amor de mi vida, mi presente y mi futuro 💑</p>
+                </div>
+                <div class="slide">
+                    <img src="img/e4.jpg" alt="Momento juntos">
+                    <p class="caption">Contigo cada momento es mágico y especial ✨</p>
+                </div>
+                <div class="slide">
+                    <img src="img/e1.jpg" alt="Amor verdadero">
+                    <p class="caption">Mi corazón late más fuerte cuando estoy contigo 💖</p>
+                </div>
+                <div class="slide">
+                    <img src="img/e5.jpg" alt="Momento romántico">
+                    <p class="caption">Eres el mejor regalo que la vida me ha dado 🎁</p>
+                </div>
+                <div class="slide">
+                    <img src="img/e6.jpg" alt="Amor eterno">
+                    <p class="caption">Gracias por llenar mi vida de amor y felicidad 🥰</p>
+                </div>
+                <div class="slide">
+                    <img src="img/e7.jpg" alt="Momento dulce">
+                    <p class="caption">Cada día a tu lado es una nueva aventura de amor 💫</p>
+                </div>
+                <div class="slide">
+                    <img src="img/e8.jpg" alt="Amor infinito">
+                    <p class="caption">Tu amor es la luz que ilumina todos mis días ⭐</p>
+                </div>
+                <div class="slide">
+                    <img src="img/e9.jpg" alt="Amor verdadero">
+                    <p class="caption">Por siempre y para siempre, te amaré más cada día 💞</p>
+                </div>
             </div>
-        </div>
-    </div>
+            <button class="prev">❮</button>
+            <button class="next">❯</button>
+        </section>
 
-    <div class="container">
-        <h1>Nuestro Dulce Aniversario</h1>
-        
-        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WIN_20240127_16_24_28_Pro-9GMVmU46Id9zGo9YW3IQHswDhozjPv.jpg" alt="Nuestra foto especial" class="fixed-photo">
-        
-        <div class="photo-gallery">
-            <h2>Momentos Preciosos</h2>
-            <img id="currentPhoto" src="" alt="Foto de la galería" class="photo">
-            <button class="nav-button prev" onclick="changePhoto(-1)">&#10094;</button>
-            <button class="nav-button next" onclick="changePhoto(1)">&#10095;</button>
-            <p id="caption" class="caption"></p>
-        </div>
-        
-        <div class="video-section">
-            <h2>Nuestro Video Especial</h2>
-            <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/QSPyF4KLYso" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <!-- Lista de deseos -->
+        <section id="bucket-list">
+            <h2>Nuestra Lista de Deseos</h2>
+            <p>Marquemos juntos los momentos que queremos vivir:</p>
+
+            <!-- Categoría: Viajes -->
+            <h3>Viajes</h3>
+            <ul id="wishlist-travel">
+                <li><input type="checkbox" class="wishlist-item" data-id="1"> Ir a Colombia</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="2"> Ir a Londres</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="3"> Ir a Nueva York</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="4"> Ir a Japón</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="5"> Ir a Dubai</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="6"> Ir a Disney Orlando/Disneyland París</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="7"> Ir a Moraira (solos)</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="8"> Ir a Jávea</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="9"> Visitar Bruselas o Italia</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="10"> Finde en una ciudad diferente</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="11"> Viaje juntos (random)</li>
+            </ul>
+
+            <!-- Categoría: Restaurantes -->
+            <h3>Restaurantes</h3>
+            <ul id="wishlist-restaurants">
+                <li><input type="checkbox" class="wishlist-item" data-id="12"> Ir a Restaurante Voltereta</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="13"> Ir al Indio</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="14"> Ir al Muerde la Pasta</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="15"> Ir al Colombiano Bar</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="16"> Ir al Colombiano Escondido</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="17"> TGB</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="18"> Saona</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="19"> Tagliatella</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="20"> Goiko</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="21"> Keysy Cookies</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="22"> Heladería/Llaollao</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="23"> Beverly</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="24"> Sant Joan</li>
+            </ul>
+
+            <!-- Categoría: Actividades al aire libre -->
+            <h3>Actividades al aire libre</h3>
+            <ul id="wishlist-outdoor">
+                <li><input type="checkbox" class="wishlist-item" data-id="25"> Ir a ver el atardecer</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="26"> Ir a ver el amanecer</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="27"> Senderismo</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="28"> Playa (solos)</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="29"> Cala (intentar solos)</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="30"> Piscina</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="31"> Montaña/paseo en montaña</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="32"> Paseo nocturno en la playa</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="33"> Picnic</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="34"> Paseos por la noche para observar</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="35"> Excursión en bici</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="36"> Ir a un río</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="37"> Acampada</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="38"> Paseo en barco</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="39"> Ir a la nieve</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="40"> Viaje en tren juntos</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="41"> Noche de enoteca</li>
+            </ul>
+
+            <!-- Categoría: Aventura -->
+            <h3>Aventura</h3>
+            <ul id="wishlist-adventure">
+                <li><input type="checkbox" class="wishlist-item" data-id="42"> Parque de atracciones</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="43"> Parque acuático</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="44"> Laser Game</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="45"> Bolera (Bonaire)</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="46"> Paintball</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="47"> Ir en globo</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="48"> Karts</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="49"> Actividad de adrenalina (como puenting)
+                </li>
+            </ul>
+
+            <!-- Categoría: Momentos Especiales -->
+            <h3>Momentos Especiales</h3>
+            <ul id="wishlist-special-moments">
+                <li><input type="checkbox" class="wishlist-item" data-id="50"> Cena romántica en casa</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="51"> Ver una serie juntos</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="52"> Hacer la merienda en casa (galletas,
+                    crepes)</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="53"> Noche de películas en casa</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="54"> Fiesta en playa (como San Juan)</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="55"> Picnic</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="56"> Celebrar San Valentín</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="57"> Autocine</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="58"> Decorar árbol de Navidad</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="59"> Decorar para Halloween</li>
+            </ul>
+
+            <!-- Categoría: Otros Deseos -->
+            <h3>Otros Deseos</h3>
+            <ul id="wishlist-other">
+                <li><input type="checkbox" class="wishlist-item" data-id="60"> Adoptar un animal</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="61"> Hacer noche de juegos</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="62"> Ir a un mercadillo de ropa</li>
+                <li><input type="checkbox" class="wishlist-item" data-id="63"> Ir de compras</li>
+            </ul>
+        </section>
+
+        <!-- Sección de preguntas -->
+        <section id="quiz">
+            <h2>Responde estas preguntas para desbloquear una sorpresa:</h2>
+            <div class="question-container">
+                <div class="question" id="question-1">
+                    <p>¿Donde fue nuestra primera cita? (Real)</p>
+                    <input type="text" id="question1" class="answer-input" placeholder="Tu respuesta...">
+                    <button class="submit-answer" data-question="question1">Comprobar</button>
+                </div>
+
+                <div class="question hidden" id="question-2">
+                    <p>¿Donde fue nuestro primer viaje?</p>
+                    <input type="text" id="question2" class="answer-input" placeholder="Tu respuesta...">
+                    <button class="submit-answer" data-question="question2">Comprobar</button>
+                </div>
+
+                <div class="question hidden" id="question-3">
+                    <p>¿Como voy a llamar a mi hijo/a?</p>
+                    <input type="text" id="question3" class="answer-input" placeholder="Tu respuesta...">
+                    <button class="submit-answer" data-question="question3">Comprobar</button>
+                </div>
             </div>
-        </div>
-        
-        <div>
-            <h2>Nuestro Mensaje de Amor</h2>
-            <p class="love-message">
-                Mi amor, cada día a tu lado es un regalo. Tu sonrisa ilumina mi mundo y tu amor llena mi corazón de alegría. 
-                Gracias por un año maravilloso lleno de momentos inolvidables. Estoy emocionado por todos los años que nos 
-                esperan juntos. Te amo más de lo que las palabras pueden expresar.
-            </p>
-        </div>
+        </section>
+
+        <!-- Sección de la carta -->
+        <section id="letter" style="display: none;">
+            <div class="letter-content">
+                <h2>Mi Amor ❤️</h2>
+
+                <div class="letter-part">
+                    <h3>El Inicio de Todo</h3>
+                    <p>Hace ya un año que nuestros caminos se cruzaron, y desde entonces mi vida ha sido infinitamente
+                        mejor. Aún recuerdo perfectamente cómo empezó todo, esas primeras conversaciones que parecían no
+                        tener fin, las risas compartidas, y esa conexión instantánea que surgió entre nosotros.</p>
+                </div>
+
+                <div class="letter-part">
+                    <h3>Nuestros Primeros Pasos</h3>
+                    <p>Nuestra primera cita en Artes y Ciencias fue el comienzo de algo mágico. Me encantó ver cómo tus
+                        ojos brillaban mientras paseábamos, cómo tu sonrisa iluminaba cada momento. Desde ese día, supe
+                        que quería pasar cada momento posible a tu lado.</p>
+                </div>
+
+                <div class="letter-part">
+                    <h3>Un Verano Inolvidable</h3>
+                    <p>Nuestro viaje a Moraira fue simplemente perfecto. Esos días en la playa, viendo atardeceres
+                        juntos, compartiendo helados y secretos, creando recuerdos que guardaré para siempre. Cada
+                        momento contigo se convierte en algo especial, incluso las cosas más simples como dormir la
+                        siesta en la playa o caminar por el paseo marítimo cogidos de la mano.</p>
+                </div>
+
+                <div class="letter-part">
+                    <h3>Momentos Especiales</h3>
+                    <p>Este año ha estado lleno de momentos increíbles: nuestras cenas románticas, las tardes de
+                        películas acurrucados, los paseos sin rumbo, las risas interminables. Me encanta cómo podemos
+                        pasar horas hablando de todo y de nada, cómo nos entendemos con solo una mirada, cómo nos
+                        complementamos perfectamente.</p>
+                </div>
+
+                <div class="letter-part">
+                    <h3>Lo Que Amo de Ti</h3>
+                    <p>Amo tu forma de ser, tu bondad infinita, tu capacidad de hacerme reír incluso en los días más
+                        grises. Amo cómo me apoyas en todo, cómo me animas a ser mejor cada día, cómo me haces sentir
+                        especial con cada pequeño gesto. Amo tu dedicación al volley, tu pasión por lo que haces, y cómo
+                        pones el corazón en todo.</p>
+                </div>
+
+                <div class="letter-part">
+                    <h3>Nuestros Momentos Cotidianos</h3>
+                    <p>Son los pequeños momentos los que hacen nuestra relación tan especial: tus mensajes de buenos
+                        días que siempre me sacan una sonrisa, nuestras llamadas nocturnas que se alargan durante horas,
+                        los abrazos sorpresa, y esa forma única que tienes de hacerme sentir que todo está bien cuando
+                        estoy contigo.</p>
+                </div>
+
+                <div class="letter-part">
+                    <h3>Mirando al Futuro</h3>
+                    <p>No puedo esperar para vivir más aventuras juntos, para seguir creando recuerdos, para seguir
+                        creciendo y aprendiendo el uno del otro. Sueño con todos los viajes que haremos, con todas las
+                        metas que alcanzaremos juntos, con todos los momentos especiales que nos esperan.</p>
+                </div>
+
+                <div class="letter-part">
+                    <h3>Por Qué Te Amo</h3>
+                    <p>Te amo por ser tú, por tu autenticidad, por tu forma de querer, por cómo me haces sentir. Te amo
+                        por los buenos momentos y por cómo me apoyas en los difíciles. Te amo por ser mi compañera de
+                        vida, mi mejor amiga, mi confidente, mi todo.</p>
+                </div>
+
+                <div class="letter-part final-message">
+                    <p>Feliz primer aniversario, mi amor. Este año ha sido el mejor de mi vida gracias a ti. Gracias por
+                        cada sonrisa, por cada abrazo, por cada momento juntos. Gracias por elegirme cada día, por
+                        quererme como soy, por hacer que cada día sea especial.</p>
+                    <p>Que este sea solo el primero de muchos aniversarios juntos. Te amo más de lo que las palabras
+                        pueden expresar.</p>
+                    <p class="signature">❤️ Con todo mi amor, Pau ❤️</p>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <div class="footer-content">
+                <div class="heart-animation">❤️</div>
+                <p>Con todo mi amor, para ti</p>
+                <div class="heart-animation">❤️</div>
+            </div>
+        </footer>
     </div>
 
-    <div id="myModal" class="modal">
-        <span class="close">&times;</span>
-        <img class="modal-content" id="modalImg">
-        <div id="modalCaption" class="modal-caption"></div>
-        <a class="modal-nav modal-prev" onclick="changeModalPhoto(-1)">&#10094;</a>
-        <a class="modal-nav modal-next" onclick="changeModalPhoto(1)">&#10095;</a>
-    </div>
-
-    <script>
-        const unlockDate = new Date('2024-12-20T18:30:00').getTime();
-        const correctPassword = "MiAniversario2024";
-        const photos = [
-            { url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WIN_20240127_16_24_27_Pro-jMpNX4zN6b9sjiBcn5KS8aCUcWg8xY.jpg", caption: "Una sonrisa que ilumina mi día" },
-            { url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WIN_20240127_16_24_28_Pro%20(3)-JxMMmPnm6jaHmASdx7jZDIcSLkE78k.jpg", caption: "Compartiendo momentos especiales" },
-            { url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WIN_20240127_16_24_27_Pro%20(4)-LXk38TEDOEYzyNVidYGReDBK29KQHW.jpg", caption: "Tu mirada lo dice todo" },
-            { url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/WIN_20240127_16_24_28_Pro%20(2)-GT4hu93PiNZHcXuh4dUbDRgCUYtYLq.jpg", caption: "Cada día contigo es una aventura" },
-        ];
-
-        let currentPhotoIndex = 0;
-
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = unlockDate - now;
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-
-            if (distance < 0) {
-                clearInterval(countdownTimer);
-                document.getElementById("passwordForm").style.display = "block";
-            }
-        }
-
-        const countdownTimer = setInterval(updateCountdown, 1000);
-
-        document.getElementById("submitPassword").addEventListener("click", function() {
-            const password = document.getElementById("password").value;
-            if (password === correctPassword) {
-                document.getElementById("lockScreen").style.display = "none";
-                document.querySelector(".container").style.display = "block";
-                initializeGallery();
-            } else {
-                document.getElementById("errorMsg").textContent = "Contraseña incorrecta. Inténtalo de nuevo.";
-            }
-        });
-
-        function changePhoto(direction) {
-            currentPhotoIndex = (currentPhotoIndex + direction + photos.length) % photos.length;
-            updatePhoto();
-        }
-
-        function updatePhoto() {
-            const currentPhoto = document.getElementById('currentPhoto');
-            const caption = document.getElementById('caption');
-            currentPhoto.src = photos[currentPhotoIndex].url;
-            currentPhoto.alt = photos[currentPhotoIndex].caption;
-            caption.textContent = photos[currentPhotoIndex].caption;
-            
-            currentPhoto.onerror = function() {
-                this.src = 'https://via.placeholder.com/400x300?text=Imagen+no+disponible';
-                this.alt = 'Imagen no disponible';
-            };
-        }
-
-        const modal = document.getElementById("myModal");
-        const modalImg = document.getElementById("modalImg");
-        const modalCaption = document.getElementById("modalCaption");
-        const currentPhoto = document.getElementById("currentPhoto");
-        const span = document.getElementsByClassName("close")[0];
-
-        currentPhoto.onclick = function() {
-            modal.style.display = "block";
-            updateModalPhoto();
-        }
-
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-
-        function changeModalPhoto(direction) {
-            currentPhotoIndex = (currentPhotoIndex + direction + photos.length) % photos.length;
-            updateModalPhoto();
-        }
-
-        function updateModalPhoto() {
-            modalImg.src = photos[currentPhotoIndex].url;
-            modalImg.alt = photos[currentPhotoIndex].caption;
-            modalCaption.innerHTML = photos[currentPhotoIndex].caption;
-            
-            modalImg.onerror = function() {
-                this.src = 'https://via.placeholder.com/400x300?text=Imagen+no+disponible';
-                this.alt = 'Imagen no disponible';
-            };
-        }
-
-        function initializeGallery() {
-            updatePhoto();
-        }
-
-        updateCountdown();
-    </script>
+    <script src="lockscreen.js"></script>
+    <script src="script.js"></script>
 </body>
+
 </html>
